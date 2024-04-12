@@ -1,0 +1,181 @@
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  TextInput,
+  View,
+  FlatList,
+  TouchableOpacity,
+  CheckBox,
+} from 'react-native';
+
+const App = () => {
+  const [todo, setTodo] = useState('');
+  const [id, setId] = useState(0);
+  const [todoList, setTodoList] = useState([]);
+
+  const Card = ({ item }) => {
+    return (
+      <View style={styles.card}>
+        <CheckBox
+          value={item.checked}
+          onValueChange={() => checkFn(item.id)}
+          style={styles.checkbox}
+        />
+
+        <Text style={[styles.cardText, item.checked && styles.strikeText]}>
+          {item.name}
+        </Text>
+
+        <TouchableOpacity
+          style={styles.dltbutton}
+          onPress={() => dltfn(item.id)}>
+          <Text style={styles.dltbuttonText}>Dlt</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const checkFn = (id) => {
+    setTodoList(
+      todoList.map((todo) =>
+        todo.id === id ? { ...todo, checked: !todo.checked } : todo
+      )
+    );
+  };
+  const dltfn = (idkey) => {
+    setTodoList(todoList.filter((item) => item.id !== idkey));
+  };
+
+  const addfunction = () => {
+    setId(id + 1);
+    setTodoList([
+      ...todoList,
+      {
+        id: id,
+        name: todo.trim(),
+        checked: false,
+      },
+    ]);
+    setTodo('');
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.heading}>Joel's Todo</Text>
+
+      <Text style={styles.subHeading}>Todo List:</Text>
+      <FlatList
+        data={todoList}
+        renderItem={Card}
+        keyExtractor={(item) => item.id}
+      />
+      <View style={styles.column}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setTodo(text)}
+          value={todo}
+          placeholder="Enter Todo"></TextInput>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            if (todo.trim().length>0) {
+              addfunction();
+            }
+          }}>
+          <Text style={styles.buttonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  heading: {
+    padding: 15,
+    fontStyle: 'italic',
+    fontSize: 20,
+    fontWeight: 'bold',
+    backgroundColor: '#f2dac2',
+    borderRadius: 5,
+    margin: 15,
+    borderColor: 'gray',
+    borderWidth: 3,
+  },
+  column: {
+    marginBottom: 9,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  container: {
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#ebf5ee',
+  },
+  input: {
+    padding: 10,
+    borderRadius: 5,
+    borderColor: 'gray',
+    borderWidth: 3,
+    marginRight: 20,
+    backgroundColor: '#ede695',
+  },
+  button: {
+    padding: 12,
+    backgroundColor: '#e68388',
+    borderRadius: 5,
+    borderWidth: 2.3,
+    borderColor: 'black',
+    shadowColor: 'gray',
+  },
+  buttonText: {
+    fontWeight: 500,
+    fontSize: 15,
+  },
+  cardText: {
+    fontWeight: 400,
+    fontSize: 15,
+    marginTop: 2.5,
+  },
+  card: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderWidth: 2,
+    padding: 9,
+    margin: 5,
+    borderRadius: 7,
+    borderColor: 'gray',
+    backgroundColor: '#c7e3ed',
+    width: 267,
+  },
+  checkbox: {
+    marginRight: 10,
+    marginTop: 6,
+  },
+  dltbutton: {
+    padding: 3.5,
+    backgroundColor: '#c4d3f5',
+    borderRadius: 8,
+    borderWidth: 2.3,
+    borderColor: 'black',
+    shadowColor: 'gray',
+  },
+  dltbuttonText: {
+    fontWeight: 500,
+    fontSize: 13,
+  },
+  subHeading: {
+    fontWeight: 550,
+    marginBottom:7
+  },
+  strikeText: {
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
+});
+
+export default App;
