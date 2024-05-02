@@ -11,18 +11,18 @@ import {
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-type todoType = {
-  id: number;
-  name: string;
-  checked: boolean;
-};
+// type todoType = {
+//   id: number;
+//   name: string;
+//   checked: boolean;
+// };
 
 const App = () => {
   const [todo, setTodo] = useState('');
   const [id, setId] = useState(0);
-  const [todoList, setTodoList] = useState<todoType[]>([]);
+  const [todoList, setTodoList] = useState([]);
 
-  const Card = (item:todoType) => {
+  const Card = (item) => {
     return (
       <View style={styles.card}>
         <CheckBox
@@ -44,14 +44,14 @@ const App = () => {
     );
   };
 
-  const checkFn = (id:number) => {
+  const checkFn = (id) => {
     setTodoList(
       todoList.map((todo) =>
         todo.id === id ? { ...todo, checked: !todo.checked } : todo
       )
     );
   };
-  const dltfn = (idkey:number) => {
+  const dltfn = (idkey) => {
     setTodoList(todoList.filter((item) => item.id !== idkey));
   };
 
